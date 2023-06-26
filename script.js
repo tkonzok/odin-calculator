@@ -13,8 +13,7 @@ function operation (operator, num1, num2) {
         num2 = +displayContent;
     };
     let result = 0;
-    console.log(num1);
-    console.log(num2);
+    const display = document.querySelector('.display');
     if (operator == "add") {
         result = add(num1, num2);
     } else if (operator == "subtract") {
@@ -22,11 +21,16 @@ function operation (operator, num1, num2) {
     } else if (operator == "multiply") {
         result = multiply(num1, num2);
     } else {
-        result = divide(num1, num2);
+        if (num2 !== 0) {
+            result = divide(num1, num2);
+        }
     };
-    const display = document.querySelector('.display');
-    display.innerHTML = result;
-    displayContent = result;
+    if (num2 == 0) {
+        display.innerHTML = "Can't divide by 0";
+    } else {
+        display.innerHTML = Math.round(result * 10e12) / 10e12;
+        displayContent = result;
+    };
     num2 = 0;
 }
 
@@ -46,7 +50,7 @@ function pressOperator(value) {
     if (num1 !== 0) {
         num2 = displayContent;
         operation(operator, +num1, +num2);
-        display.innerHTML = displayContent;
+        display.innerHTML = Math.round(displayContent * 10e12) / 10e12;
     }
     num1 = displayContent;
     console.log(num1);
