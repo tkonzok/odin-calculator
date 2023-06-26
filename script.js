@@ -6,24 +6,33 @@ const divide = (a,b) => a / b;
 let num1 = 0;
 let num2 = 0;
 let operator = "";
+let displayContent = "";
 
 function operation (operator, num1, num2) {
-    if (operator === "add") {
-        return add(num1, num2);
-    } else if (operator === "subtract") {
-        return subtract(num1, num2);
-    } else if (operator === "multiply") {
-        return multiply(num1, num2);
+    if (num2 == 0) {
+        num2 = +displayContent;
+    };
+    let result = 0;
+    console.log(num1);
+    console.log(num2);
+    if (operator == "add") {
+        result = add(num1, num2);
+    } else if (operator == "subtract") {
+        result = subtract(num1, num2);
+    } else if (operator == "multiply") {
+        result = multiply(num1, num2);
     } else {
-        return divide(num1, num2);
-    }
+        result = divide(num1, num2);
+    };
+    const display = document.querySelector('.display');
+    display.innerHTML = result;
+    displayContent = result;
+    num2 = 0;
 }
-
-let displayContent = "";
 
 function pressNumber(value) {
     const display = document.querySelector('.display');
-    if (display.textContent == "0") {
+    if (display.textContent == "0" || displayContent == "") {
         display.innerHTML = value;
         displayContent = value;
     } else {
@@ -32,14 +41,51 @@ function pressNumber(value) {
     }
 }
 
-const numberBtn = document.querySelectorAll('.num');
-console.log(numberBtn);
+function pressOperator(value) {
+    const display = document.querySelector('.display');
+    if (num1 !== 0) {
+        num2 = displayContent;
+        operation(operator, +num1, +num2);
+        display.innerHTML = displayContent;
+    }
+    num1 = displayContent;
+    console.log(num1);
+    displayContent = "";
+    if (value === "+") {
+        operator = "add";
+    } else if (value === "-") {
+        operator = "subtract";
+    } else if (value === "*") {
+        operator = "multiply";
+    } else {
+        operator = "divide";
+    }
+}
 
+function pressClear() {
+    const display = document.querySelector('.display');
+    display.innerHTML = "0";
+    displayContent = "";
+    num1 = 0;
+    num2 = 0;
+    operator = "";
+}
+
+const numberBtn = document.querySelectorAll('.num');
 numberBtn.forEach(e => {
-    console.log(e.textContent);
     e.addEventListener('click', () => pressNumber(e.textContent));
 });
 
+const operatorBtn = document.querySelectorAll('.op');
+operatorBtn.forEach(e => {
+    e.addEventListener('click', () => pressOperator(e.textContent));
+});
+
+const calcBtn = document.querySelector('.calc');
+calcBtn.addEventListener('click', () => operation(operator, +num1, +displayContent));
+
+const clearBtn = document.querySelector('.clear');
+clearBtn.addEventListener('click', () => pressClear());
 
 /*
 
